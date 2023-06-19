@@ -1,10 +1,10 @@
 'use client'
 
-import { registerUser } from '@/app/api/user/user';
 import { validateEmail, validateName, validatePassword, validatePasswordConfirmation } from '@/utils/validate'
 
 import { useState } from 'react';
 import InputField from './InputField';
+import apiClient from '@/utils/APIClient';
 
 type UserFields = {
     name: string;
@@ -75,34 +75,36 @@ const RegisterComponent = () => {
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-    
+
         let valid = true;
         let formErrors: ErrorState = {};
-    
+
         Object.keys(validations).forEach((key) => {
             const fieldError = key === 'passwordConfirmation'
-              ? validations[key as keyof UserFields](formFields.password, formFields[key as keyof UserFields])
-              : validations[key as keyof UserFields](formFields[key as keyof UserFields]);
+                ? validations[key as keyof UserFields](formFields.password, formFields[key as keyof UserFields])
+                : validations[key as keyof UserFields](formFields[key as keyof UserFields]);
             if (fieldError) {
                 formErrors[key as keyof UserFields] = fieldError;
                 valid = false;
             }
         });
-    
+
         if (!valid) {
             setErrors(formErrors);
             return;
         }
-    
+
         try {
-            await registerUser(formFields);
-            setSuccessMessage('User registration successful!');
+            // Use the apiClient object
+            apiClient.registerUser(formFields).then(data => {
+                console.log(data);
+            }).catch(error => {
+                console.error(error);
+            });
         } catch (error) {
             console.error('Registration failed:', error);
         }
     };
-    
-
 
     return (
         <form onSubmit={handleSubmit}>

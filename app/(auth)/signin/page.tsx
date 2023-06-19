@@ -3,6 +3,7 @@ export const metadata = {
   description: 'Page description',
 }
 
+import LoginComponent from '@/components/LoginComponent'
 import Link from 'next/link'
 
 export default function SignIn() {
@@ -15,35 +16,7 @@ export default function SignIn() {
         </div>
         {/* Form */}
         <div className="max-w-sm mx-auto">
-          <form>
-            <div className="space-y-4">
-              <div>
-                <label className="block text-sm text-slate-400 font-medium mb-1" htmlFor="email">
-                  Email
-                </label>
-                <input id="email" className="form-input text-sm py-2 w-full" type="email" required />
-              </div>
-              <div>
-                <div className="flex justify-between">
-                  <label className="block text-sm text-slate-400 font-medium mb-1" htmlFor="password">
-                    Password
-                  </label>
-                  <Link className="text-sm font-medium text-indigo-500 ml-2" href="/reset-password">
-                    Forgot?
-                  </Link>
-                </div>
-                <input id="password" className="form-input text-sm py-2 w-full" type="password" autoComplete="on" required />
-              </div>
-            </div>
-            <div className="mt-6">
-              <button className="btn-sm text-sm text-white bg-indigo-500 hover:bg-indigo-600 w-full shadow-sm group">
-                Sign In{' '}
-                <span className="tracking-normal text-sky-300 group-hover:translate-x-0.5 transition-transform duration-150 ease-in-out ml-1">
-                  -&gt;
-                </span>
-              </button>
-            </div>
-          </form>
+          <LoginComponent />
           {/* Divider */}
           <div className="flex items-center my-6">
             <div className="border-t border-slate-800 grow mr-3" aria-hidden="true" />
