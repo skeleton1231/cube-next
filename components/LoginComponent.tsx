@@ -2,51 +2,106 @@
 import apiClient from '@/utils/APIClient';
 import Link from 'next/link';
 import { useState } from 'react';
+import { validateEmail, validatePassword } from '@/utils/validate';
+import InputField from './InputField'; // Assuming this is the correct path
+
+type LoginFormFields = {
+  email: string;
+  password: string;
+}
+
+type TouchedFields = {
+  [key in keyof LoginFormFields]: boolean;
+}
+
+type ErrorState = {
+  [key in keyof LoginFormFields]?: string | null;
+}
+
+const fields: LoginFormFields = {
+  email: '',
+  password: '',
+};
+
+const validations: { [key: string]: (value: string) => string | null; } = {
+  email: validateEmail,
+  password: validatePassword,
+};
 
 export default function SignIn() {
-  // state to store form inputs
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  
-  // form submission handler
-  const handleSubmit = async (event: { preventDefault: () => void; }) => {
-    event.preventDefault();
-    try {
-      const data = await apiClient.loginUser({ email, password });
-      // handle success (e.g. redirect user, show a success message, etc.)
-    } catch (error) {
-      // handle error (e.g. show error message)
-      console.error("An error occurred while logging in: ", error);
-    }
-  }
-  
-  return (
-    // ...rest of your component
+  const [formFields, setFormFields] = useState(fields);
+  const [touched, setTouched] = useState<TouchedFields>({ email: false, password: false });
+  const [errors, setErrors] = useState<ErrorState>({});
 
+  const handleInputChange = (field: keyof LoginFormFields) => (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value;
+    setFormFields((prev) => ({ ...prev, [field]: value }));
+    if (touched[field]) {
+      validateField(field, value);
+    }
+  };
+
+
+  const handleBlur = (field: keyof LoginFormFields) => () => {
+    setTouched((prev) => ({ ...prev, [field]: true }));
+    validateField(field, formFields[field]);
+  };
+
+  const validateField = (field: keyof LoginFormFields, value: string) => {
+    const validationFunc = validations[field];
+    if (validationFunc) {
+      const errorMessage = validationFunc(value);
+      setErrors((prev) => ({ ...prev, [field]: errorMessage }));
+    }
+  };
+
+  const handleSubmit = async (e: { preventDefault: () => void; }) => {
+    e.preventDefault();
+    Object.keys(formFields).forEach((field) => {
+      const fieldKey = field as keyof LoginFormFields;
+      validateField(fieldKey, formFields[fieldKey]);
+    });
+    if (Object.values(errors).every((error) => !error)) {
+      try {
+        const data = await apiClient.loginUser(formFields);
+        // handle success (e.g. redirect user, show a success message, etc.)
+      } catch (error) {
+        // handle error (e.g. show error message)
+        console.error("An error occurred while logging in: ", error);
+      }
+    }
+  };
+
+  return (
     <form onSubmit={handleSubmit}>
-      <div className="space-y-4">
-        <div>
-          <label className="block text-sm text-slate-400 font-medium mb-1" htmlFor="email">
-            Email
-          </label>
-          <input id="email" className="form-input text-sm py-2 w-full" type="email" required 
-            value={email} onChange={e => setEmail(e.target.value)}
-          />
-        </div>
-        <div>
-          <div className="flex justify-between">
-            <label className="block text-sm text-slate-400 font-medium mb-1" htmlFor="password">
-              Password
-            </label>
-            <Link className="text-sm font-medium text-indigo-500 ml-2" href="/reset-password">
-              Forgot?
-            </Link>
-          </div>
-          <input id="password" className="form-input text-sm py-2 w-full" type="password" autoComplete="on" required 
-            value={password} onChange={e => setPassword(e.target.value)}
-          />
-        </div>
-      </div>
+      <InputField
+        id="email"
+        field="email"
+        value={formFields.email}
+        handleChange={handleInputChange('email')}
+        handleBlur={handleBlur('email')}
+        touched={touched.email}
+        type="email"
+        label="Email"
+        required
+        error={touched.email && errors.email ? errors.email : undefined}
+      />
+      <InputField
+        id="password"
+        field="password"
+        value={formFields.password}
+        handleChange={handleInputChange('password')}
+        handleBlur={handleBlur('password')}
+        touched={touched.password}
+        type="password"
+        label="Password"
+        required
+        error={touched.password && errors.password ? errors.password : undefined}
+      />
+      <Link className="text-sm font-medium text-indigo-500 ml-2" href="/reset-password">
+              Forgot Password?
+      </Link>
+      {/* The rest of your form */}
       <div className="mt-6">
         <button className="btn-sm text-sm text-white bg-indigo-500 hover:bg-indigo-600 w-full shadow-sm group">
           Sign In{' '}
@@ -56,7 +111,13 @@ export default function SignIn() {
         </button>
       </div>
     </form>
-
-    // ...rest of your component
   );
 }
+
+
+
+
+
+
+
+
