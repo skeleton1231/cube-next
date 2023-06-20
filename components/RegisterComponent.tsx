@@ -1,10 +1,11 @@
 'use client'
-
 import { validateEmail, validateName, validatePassword, validatePasswordConfirmation } from '@/utils/validate'
-
 import { useState } from 'react';
 import InputField from './InputField';
 import apiClient from '@/utils/APIClient';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 type UserFields = {
     name: string;
@@ -48,7 +49,9 @@ const RegisterComponent = () => {
         password: false,
         passwordConfirmation: false
     });
-    const [successMessage, setSuccessMessage] = useState('');
+    // const [successMessage, setSuccessMessage] = useState('');
+    // const { apiResponse, setApiResponse } = useApiResponse();
+
 
     const handleInputChange = (fieldName: keyof UserFields) => (
         event: React.ChangeEvent<HTMLInputElement>
@@ -93,16 +96,13 @@ const RegisterComponent = () => {
             setErrors(formErrors);
             return;
         }
-
         try {
             // Use the apiClient object
-            apiClient.registerUser(formFields).then(data => {
-                console.log(data);
-            }).catch(error => {
-                console.error(error);
-            });
-        } catch (error) {
+            const response = await apiClient.registerUser(formFields)
+            toast.success(response.msg);
+        } catch (error: any) {
             console.error('Registration failed:', error);
+            toast.error(error.message || 'An unknown error occurred');
         }
     };
 
@@ -164,7 +164,18 @@ const RegisterComponent = () => {
                     </span>
                 </button>
             </div>
-            {successMessage && <p>{successMessage}</p>}
+            <ToastContainer
+                position="top-center"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+            />
+
         </form>
     );
 }
