@@ -1,8 +1,12 @@
+import { useUser } from '@/context/UserContext';
 import Link from 'next/link'
 
 export default function Header({ nav = true }: {
   nav?: boolean
 }) {
+  const isClient = typeof window !== 'undefined';
+  const { user } = isClient ? useUser() : { user: null };
+  console.log(user)
   return (
     <header className="absolute w-full z-30">
       <div className="max-w-6xl mx-auto px-4 sm:px-6">
@@ -36,17 +40,34 @@ export default function Header({ nav = true }: {
             <nav className="flex grow">
               {/* Desktop sign in links */}
               <ul className="flex grow justify-end flex-wrap items-center">
-                <li>
-                  <Link className="font-medium text-slate-500 hover:text-slate-300 px-3 lg:px-5 py-2 flex items-center transition duration-150 ease-in-out" href="/signin">Sign in</Link>
-                </li>
-                <li className="ml-3">
-                  <Link className="btn-sm text-white bg-indigo-500 hover:bg-indigo-600 w-full shadow-sm group" href="/signup">
-                    Get Started <span className="tracking-normal text-sky-300 group-hover:translate-x-0.5 transition-transform duration-150 ease-in-out ml-1">-&gt;</span>
-                  </Link>
-                </li>
+                {!user && (
+                  <>
+                    <li>
+                      <Link className="font-medium text-slate-500 hover:text-slate-300 px-3 lg:px-5 py-2 flex items-center transition duration-150 ease-in-out" href="/signin">Sign in</Link>
+                    </li>
+                    <li className="ml-3">
+                      <Link className="btn-sm text-white bg-indigo-500 hover:bg-indigo-600 w-full shadow-sm group" href="/signup">
+                        Get Started <span className="tracking-normal text-sky-300 group-hover:translate-x-0.5 transition-transform duration-150 ease-in-out ml-1">-&gt;</span>
+                      </Link>
+                    </li>
+                  </>
+                )}
+                {user && (
+                  <>
+                    <li>
+                      {/* Render user profile here */}
+                    </li>
+                    <li className="ml-3">
+                      <Link className="btn-sm text-white bg-indigo-500 hover:bg-indigo-600 w-full shadow-sm group" href="/profile">
+                        {user.name} <span className="tracking-normal text-sky-300 group-hover:translate-x-0.5 transition-transform duration-150 ease-in-out ml-1">-&gt;</span>
+                      </Link>
+                    </li>
+                  </>
+                )}
               </ul>
             </nav>
           }
+
         </div>
       </div>
     </header>

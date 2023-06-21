@@ -1,8 +1,4 @@
-export const metadata = {
-  title: 'Home - Cube',
-  description: 'Page description',
-}
-
+import DefaultLayout from './layout'
 import Hero from '@/components/hero'
 import Testimonials from '@/components/testimonials'
 import Features from '@/components/features'
@@ -14,7 +10,7 @@ import Cta from '@/components/cta'
 
 export default function Home() {
   return (
-    <>
+    <DefaultLayout>
       <Hero />
       <Testimonials />
       <Features />
@@ -23,6 +19,6 @@ export default function Home() {
       <Pricing />
       <Faqs />
       <Cta />
-    </>
+    </DefaultLayout>
   )
 }
