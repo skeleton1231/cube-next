@@ -6,7 +6,6 @@ export default function Header({ nav = true }: {
 }) {
   const isClient = typeof window !== 'undefined';
   const { user } = isClient ? useUser() : { user: null };
-  console.log(user)
   return (
     <header className="absolute w-full z-30">
       <div className="max-w-6xl mx-auto px-4 sm:px-6">

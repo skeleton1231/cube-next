@@ -5,6 +5,7 @@ import InputField from './InputField';
 import apiClient from '@/utils/APIClient';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import router from 'next/router';
 
 
 type UserFields = {
@@ -100,6 +101,7 @@ const RegisterComponent = () => {
             // Use the apiClient object
             const response = await apiClient.registerUser(formFields)
             toast.success(response.msg);
+            router.push('/'); // Redirect to home page
         } catch (error: any) {
             console.error('Registration failed:', error);
             toast.error(error.message || 'An unknown error occurred');

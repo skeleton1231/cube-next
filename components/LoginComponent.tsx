@@ -4,6 +4,8 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { validateEmail, validatePassword } from '@/utils/validate';
 import InputField from './InputField'; // Assuming this is the correct path
+import { toast } from 'react-toastify';
+import router from 'next/router';
 
 type LoginFormFields = {
   email: string;
@@ -65,9 +67,18 @@ export default function SignIn() {
       try {
         const data = await apiClient.loginUser(formFields);
         // handle success (e.g. redirect user, show a success message, etc.)
+        toast.success('Successfully logged in!', {
+          position: toast.POSITION.TOP_CENTER
+        });
+        router.push('/'); // Redirect to home page
       } catch (error) {
         // handle error (e.g. show error message)
         console.error("An error occurred while logging in: ", error);
+        // handle error (e.g. show error message)
+        console.error("An error occurred while logging in: ", error);
+        toast.error('Failed to log in. Please try again.', {
+          position: toast.POSITION.TOP_CENTER
+        });
       }
     }
   };
@@ -99,7 +110,7 @@ export default function SignIn() {
         error={touched.password && errors.password ? errors.password : undefined}
       />
       <Link className="text-sm font-medium text-indigo-500 ml-2" href="/reset-password">
-              Forgot Password?
+        Forgot Password?
       </Link>
       {/* The rest of your form */}
       <div className="mt-6">

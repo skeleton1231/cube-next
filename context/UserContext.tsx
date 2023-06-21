@@ -21,9 +21,7 @@ const UserContext = createContext<UserContextValue | undefined>(undefined);
 
 export const UserProvider = ({ children }: UserContextProps) => {
   const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
-
-
+  
   // Fetch user data when the component mounts
   useEffect(() => {
     const fetchUser = async () => {
@@ -34,11 +32,9 @@ export const UserProvider = ({ children }: UserContextProps) => {
         try {
           // Fetch user data using the API client
           const userData = await apiClient.fetchUser(token);
-          console.log(userData)
           setUser(userData);
         } catch (error) {
           // Handle errors (e.g., token is invalid)
-          console.error('Failed to fetch user:', error);
           Cookies.remove('access_token'); // Remove invalid token
           setUser(null);
         }

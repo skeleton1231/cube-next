@@ -10,6 +10,7 @@ import Footer from '@/components/ui/footer'
 import { UserProvider } from '@/context/UserContext'
 
 export default function DefaultLayout({ children }: { children: React.ReactNode }) {
+  console.log("DefaultLayout:layout.tsx start");
   useEffect(() => {
     AOS.init({
       once: true,
@@ -20,7 +21,7 @@ export default function DefaultLayout({ children }: { children: React.ReactNode 
   })
 
   return (
-    <UserProvider>
+    <><UserProvider>
       <Header />
       <main className="grow">
         <div className="hidden md:block absolute left-1/2 -translate-x-1/2 pointer-events-none -z-10" aria-hidden="true">
@@ -30,6 +31,7 @@ export default function DefaultLayout({ children }: { children: React.ReactNode 
       </main>
       <Footer />
     </UserProvider>
+    </>
   )
 }
 
