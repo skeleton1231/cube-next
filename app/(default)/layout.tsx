@@ -7,6 +7,7 @@ import Image from 'next/image'
 import Header from '@/components/ui/header'
 import Illustration from '@/public/images/hero-illustration.svg'
 import Footer from '@/components/ui/footer'
+import { UserProvider } from '@/context/UserContext'
 
 export default function DefaultLayout({ children }: { children: React.ReactNode }) {
   useEffect(() => {
@@ -19,7 +20,7 @@ export default function DefaultLayout({ children }: { children: React.ReactNode 
   })
 
   return (
-    <>
+    <UserProvider>
       <Header />
       <main className="grow">
         <div className="hidden md:block absolute left-1/2 -translate-x-1/2 pointer-events-none -z-10" aria-hidden="true">
@@ -28,6 +29,7 @@ export default function DefaultLayout({ children }: { children: React.ReactNode 
         {children}
       </main>
       <Footer />
-    </>
+    </UserProvider>
   )
 }
+
