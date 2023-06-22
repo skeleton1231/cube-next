@@ -1,16 +1,13 @@
-// pages/_app.js
+import { UserProvider } from '@/context/UserContext';
 import { AppProps } from 'next/app';
-import { useCurrentUser } from "@/app/hook/user";
-import Header from "@/components/ui/header";
+
 
 function MyApp({ Component, pageProps }: AppProps) {
-  const { user } = useCurrentUser();
-
+  console.log("MyApp loaded")
   return (
-    <>
-      <Header user={user} />
+    <UserProvider>
       <Component {...pageProps} />
-    </>
+    </UserProvider>
   );
 }
 
