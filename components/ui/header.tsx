@@ -1,11 +1,15 @@
+'use client'
 import { useUser } from '@/context/UserContext';
 import Link from 'next/link'
+import React from 'react';
 
 export default function Header({ nav = true }: {
   nav?: boolean
 }) {
   const isClient = typeof window !== 'undefined';
   const { user } = isClient ? useUser() : { user: null };
+  const [showSubMenu, setShowSubMenu] = React.useState(false);
+
   return (
     <header className="absolute w-full z-30">
       <div className="max-w-6xl mx-auto px-4 sm:px-6">
@@ -53,13 +57,16 @@ export default function Header({ nav = true }: {
                 )}
                 {user && (
                   <>
-                    <li>
-                      {/* Render user profile here */}
-                    </li>
-                    <li className="ml-3">
-                      <Link className="btn-sm text-white bg-indigo-500 hover:bg-indigo-600 w-full shadow-sm group" href="/profile">
+                    <li className="relative ml-3">
+                      <div onClick={() => setShowSubMenu(!showSubMenu)} className="btn-sm text-white bg-indigo-500 hover:bg-indigo-600 w-full shadow-sm group cursor-pointer">
                         {user.name} <span className="tracking-normal text-sky-300 group-hover:translate-x-0.5 transition-transform duration-150 ease-in-out ml-1">-&gt;</span>
-                      </Link>
+                      </div>
+                      {showSubMenu && (
+                        <div className="absolute right-0 mt-2 py-2 w-48 bg-white rounded-md shadow-xl z-20">
+                          <Link className="block px-4 py-2 text-sm capitalize text-gray-700 hover:bg-blue-500 hover:text-white" href="/profile">Profile</Link>
+                          <Link className="block px-4 py-2 text-sm capitalize text-gray-700 hover:bg-blue-500 hover:text-white" href="/signout">Sign Out</Link>
+                        </div>
+                      )}
                     </li>
                   </>
                 )}

@@ -55,7 +55,8 @@ export const useUser = () => {
   const context = useContext(UserContext);
 
   if (!context) {
-    throw new Error('useUser must be used within a UserProvider');
+    //throw new Error('useUser must be used within a UserProvider');
+    return { user: { name: 'Guest', role: 'guest' } };
   }
 
   return context; // This will return both `user` and `setUser`

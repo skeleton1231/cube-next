@@ -5,7 +5,8 @@ import InputField from './InputField';
 import apiClient from '@/utils/APIClient';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import router from 'next/router';
+import router, { useRouter } from 'next/router';
+
 
 
 type UserFields = {
@@ -50,6 +51,7 @@ const RegisterComponent = () => {
         password: false,
         passwordConfirmation: false
     });
+    const router = useRouter();
     // const [successMessage, setSuccessMessage] = useState('');
     // const { apiResponse, setApiResponse } = useApiResponse();
 

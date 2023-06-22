@@ -4,8 +4,8 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { validateEmail, validatePassword } from '@/utils/validate';
 import InputField from './InputField'; // Assuming this is the correct path
-import { toast } from 'react-toastify';
-import router from 'next/router';
+import { ToastContainer, toast } from 'react-toastify';
+import router, { useRouter } from 'next/router';
 
 type LoginFormFields = {
   email: string;
@@ -34,6 +34,7 @@ export default function SignIn() {
   const [formFields, setFormFields] = useState(fields);
   const [touched, setTouched] = useState<TouchedFields>({ email: false, password: false });
   const [errors, setErrors] = useState<ErrorState>({});
+  const router = useRouter();
 
   const handleInputChange = (field: keyof LoginFormFields) => (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
@@ -121,6 +122,17 @@ export default function SignIn() {
           </span>
         </button>
       </div>
+      <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
     </form>
   );
 }
