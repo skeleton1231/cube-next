@@ -4,10 +4,13 @@ import { UserProvider } from '@/context/UserContext';
 import Link from 'next/link'
 import React from 'react';
 
+
+
 export default function Header({ nav = true }: { nav?: boolean }) {
-  const { user } = useCurrentUser();
+  const { user, loading } = useCurrentUser();
   const [showSubMenu, setShowSubMenu] = React.useState(false);
   console.log("Current user: ", user);
+
   
   return (
     <header className="absolute w-full z-30">

@@ -9,10 +9,11 @@ import { UserProvider } from '@/context/UserContext';
 import Header from '@/components/ui/header';
 import Footer from '@/components/ui/footer';
 
+
 export default function Profile() {
   return (
     <UserProvider>
-      <Header></Header>
+      <Header nav={true} />
       <div className="relative max-w-6xl mx-auto px-4 sm:px-6">
         <div className="pt-32 pb-12 md:pt-40 md:pb-20">
           <div className="max-w-sm mx-auto">
@@ -28,7 +29,7 @@ export default function Profile() {
           </div>
         </div>
       </div>
-      <Footer></Footer>
+      <Footer />
     </UserProvider>
   )
 }

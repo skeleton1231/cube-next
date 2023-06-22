@@ -46,7 +46,7 @@ const validations: ValidationFunctions = {
 const RegisterComponent = () => {
     const { user, loading } = useCurrentUser();
     if (user) { window.location.href = '/'; } 
-    
+
     const [formFields, setFormFields] = useState<UserFields>(fields);
     const [errors, setErrors] = useState<ErrorState>({});
     const [touched, setTouched] = useState<TouchedFields>({ // New state
@@ -183,7 +183,6 @@ const RegisterComponent = () => {
                 draggable
                 pauseOnHover
             />
-
         </form>
     );
 }

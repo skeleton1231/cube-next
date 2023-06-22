@@ -3,10 +3,7 @@ import { useCurrentUser } from "@/app/hook/user";
 
 export const ProfileComponent = () => {
 
-    const { user, loading } = useCurrentUser();
-    if (loading) {
-      return <p>Loading...</p>; // <- Render a loading state
-    }
+    const { user } = useCurrentUser();
 
     // This will only be rendered on the client side
       return (
