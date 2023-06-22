@@ -1,23 +1,14 @@
 'use client'
-import { useUser } from '@/context/UserContext';
+import { useCurrentUser } from '@/app/hook/user';
+import { UserProvider } from '@/context/UserContext';
 import Link from 'next/link'
 import React from 'react';
 
-export default function Header({ nav = true }: {
-  nav?: boolean
-}) {
-  const isClient = typeof window !== 'undefined';
-
-  // Initialize user as null
-  let user = null;
-  // If we are on the client-side, get user from UserContext
-  if (isClient) {
-    const userContext = useUser();
-    user = userContext ? userContext.user : null;
-  }
-
+export default function Header({ nav = true }: { nav?: boolean }) {
+  const { user } = useCurrentUser();
   const [showSubMenu, setShowSubMenu] = React.useState(false);
-
+  console.log("Current user: ", user);
+  
   return (
     <header className="absolute w-full z-30">
       <div className="max-w-6xl mx-auto px-4 sm:px-6">

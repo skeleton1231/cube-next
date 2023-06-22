@@ -5,11 +5,11 @@ export function useCurrentUser() {
   
   // If we are on the server-side, just return null
   if (!isClient) {
-    return null;
+    return { user: null, loading: true };
   }
   
   // If we are on the client-side, get user from UserContext
   const userContext = useUser();
   
-  return userContext ? userContext.user : null;
+  return userContext ? { user: userContext.user, loading: userContext.loading } : { user: null, loading: true };
 }

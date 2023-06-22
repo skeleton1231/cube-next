@@ -1,16 +1,12 @@
 'use client'
-import { useUser, User } from "@/context/UserContext";
+import { useCurrentUser } from "@/app/hook/user";
+import { UserProvider } from "@/context/UserContext";
 
 export const ProfileComponent = () => {
 
-    const isClient = typeof window !== 'undefined';
-
-    // Initialize user as null
-    let user = null;
-    // If we are on the client-side, get user from UserContext
-    if (isClient) {
-      const userContext = useUser();
-      user = userContext ? userContext.user : null;
+    const { user, loading } = useCurrentUser();
+    if (loading) {
+      return <p>Loading...</p>; // <- Render a loading state
     }
 
     // This will only be rendered on the client side
@@ -33,7 +29,6 @@ export const ProfileComponent = () => {
                 </dl>
             </div>
         </div>
-    
       );
     
 
