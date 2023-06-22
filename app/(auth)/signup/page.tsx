@@ -10,12 +10,13 @@ import Avatar04 from '@/public/images/avatar-04.jpg'
 import Avatar from '@/components/Avatar'
 import ListItem from '@/components/ListItem'
 import RegisterComponent from '@/components/RegisterComponent'
+import { UserProvider } from '@/context/UserContext'
 
 
 export default function SignUp() {
 
   return (
-
+    <UserProvider>
     <div className="relative max-w-6xl mx-auto px-4 sm:px-6">
       <div className="pt-32 pb-12 md:pt-40 md:pb-20">
         <div className="lg:flex lg:space-x-20">
@@ -50,5 +51,6 @@ export default function SignUp() {
         </div>
       </div>
     </div>
+    </UserProvider>
   )
 }

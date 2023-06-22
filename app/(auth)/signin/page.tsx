@@ -4,10 +4,12 @@ export const metadata = {
 }
 
 import LoginComponent from '@/components/LoginComponent'
+import { UserProvider } from '@/context/UserContext'
 import Link from 'next/link'
 
 export default function SignIn() {
   return (
+    <UserProvider>
     <div className="relative max-w-6xl mx-auto px-4 sm:px-6">
       <div className="pt-32 pb-12 md:pt-40 md:pb-20">
         {/* Page header */}
@@ -43,5 +45,6 @@ export default function SignIn() {
         </div>
       </div>
     </div>
+    </UserProvider>
   )
 }

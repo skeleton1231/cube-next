@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { validateEmail, validatePassword } from '@/utils/validate';
 import InputField from './InputField'; // Assuming this is the correct path
 import { ToastContainer, toast } from 'react-toastify';
+import { useCurrentUser } from '@/app/hook/user';
 
 type LoginFormFields = {
   email: string;
@@ -30,6 +31,10 @@ const validations: { [key: string]: (value: string) => string | null; } = {
 };
 
 export default function SignIn() {
+
+  const { user, loading } = useCurrentUser();
+  if (user) { window.location.href = '/'; } 
+  
   const [formFields, setFormFields] = useState(fields);
   const [touched, setTouched] = useState<TouchedFields>({ email: false, password: false });
   const [errors, setErrors] = useState<ErrorState>({});

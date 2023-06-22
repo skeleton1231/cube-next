@@ -1,6 +1,5 @@
 'use client'
 import { useCurrentUser } from "@/app/hook/user";
-import { UserProvider } from "@/context/UserContext";
 
 export const ProfileComponent = () => {
 

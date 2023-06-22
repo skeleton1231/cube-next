@@ -6,6 +6,7 @@ import apiClient from '@/utils/APIClient';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useRouter } from 'next/router';
+import { useCurrentUser } from '@/app/hook/user';
 
 
 
@@ -43,6 +44,9 @@ const validations: ValidationFunctions = {
 };
 
 const RegisterComponent = () => {
+    const { user, loading } = useCurrentUser();
+    if (user) { window.location.href = '/'; } 
+    
     const [formFields, setFormFields] = useState<UserFields>(fields);
     const [errors, setErrors] = useState<ErrorState>({});
     const [touched, setTouched] = useState<TouchedFields>({ // New state
