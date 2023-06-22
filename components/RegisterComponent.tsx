@@ -5,7 +5,7 @@ import InputField from './InputField';
 import apiClient from '@/utils/APIClient';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import router, { useRouter } from 'next/router';
+import { useRouter } from 'next/router';
 
 
 
@@ -51,7 +51,6 @@ const RegisterComponent = () => {
         password: false,
         passwordConfirmation: false
     });
-    const router = useRouter();
     // const [successMessage, setSuccessMessage] = useState('');
     // const { apiResponse, setApiResponse } = useApiResponse();
 
@@ -103,6 +102,7 @@ const RegisterComponent = () => {
             // Use the apiClient object
             const response = await apiClient.registerUser(formFields)
             toast.success(response.msg);
+            let router = useRouter();
             router.push('/'); // Redirect to home page
         } catch (error: any) {
             console.error('Registration failed:', error);

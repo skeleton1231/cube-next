@@ -7,7 +7,15 @@ export default function Header({ nav = true }: {
   nav?: boolean
 }) {
   const isClient = typeof window !== 'undefined';
-  const { user } = isClient ? useUser() : { user: null };
+
+  // Initialize user as null
+  let user = null;
+  // If we are on the client-side, get user from UserContext
+  if (isClient) {
+    const userContext = useUser();
+    user = userContext ? userContext.user : null;
+  }
+
   const [showSubMenu, setShowSubMenu] = React.useState(false);
 
   return (

@@ -5,7 +5,6 @@ import { useState } from 'react';
 import { validateEmail, validatePassword } from '@/utils/validate';
 import InputField from './InputField'; // Assuming this is the correct path
 import { ToastContainer, toast } from 'react-toastify';
-import router, { useRouter } from 'next/router';
 
 type LoginFormFields = {
   email: string;
@@ -34,7 +33,6 @@ export default function SignIn() {
   const [formFields, setFormFields] = useState(fields);
   const [touched, setTouched] = useState<TouchedFields>({ email: false, password: false });
   const [errors, setErrors] = useState<ErrorState>({});
-  const router = useRouter();
 
   const handleInputChange = (field: keyof LoginFormFields) => (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
@@ -71,7 +69,8 @@ export default function SignIn() {
         toast.success('Successfully logged in!', {
           position: toast.POSITION.TOP_CENTER
         });
-        router.push('/'); // Redirect to home page
+        window.location.href = '/';
+
       } catch (error) {
         // handle error (e.g. show error message)
         console.error("An error occurred while logging in: ", error);
