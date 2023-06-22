@@ -2,16 +2,19 @@
 import React, { useContext } from 'react'
 
 import Link from 'next/link'
-import ProfileComponent from '@/components/ProfileComponent'
-import { UserProvider } from '@/context/UserContext'
+import dynamic from 'next/dynamic'
+import { UserProvider } from '@/context/UserContext';
 
 export const metadata = {
   title: 'Profile - Cube',
   description: 'User profile page',
 }
 
-export default function Profile() {
+// Dynamically import the ProfileComponent with SSR (Server-Side Rendering) set to false
+const DynamicProfileComponent = dynamic(() => import('@/components/ProfileComponent'), { ssr: false });
 
+
+export default function Profile() {
 
   return (
     <UserProvider>
@@ -23,7 +26,7 @@ export default function Profile() {
         </div>
         {/* Profile */}
         <div className="max-w-sm mx-auto">
-          <ProfileComponent />
+          <DynamicProfileComponent/>
         </div>
         {/* Return to Home */}
         <div className="text-center mt-6">

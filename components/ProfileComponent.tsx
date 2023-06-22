@@ -1,19 +1,17 @@
 'use client'
-import { useUser } from "@/context/UserContext";
+import { useUser, User } from "@/context/UserContext";
 
 export const ProfileComponent = () => {
 
     const isClient = typeof window !== 'undefined';
-  
+
     // Initialize user as null
     let user = null;
-    
     // If we are on the client-side, get user from UserContext
     if (isClient) {
       const userContext = useUser();
       user = userContext ? userContext.user : null;
     }
-    console.log(user)
 
     // This will only be rendered on the client side
       return (
