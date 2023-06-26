@@ -1,6 +1,5 @@
 'use client'
 import { useCurrentUser } from '@/app/hook/user';
-import { UserProvider } from '@/context/UserContext';
 import Link from 'next/link'
 import React from 'react';
 
