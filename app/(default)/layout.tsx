@@ -11,6 +11,7 @@ import { UserProvider } from '@/context/UserContext'
 
 export default function DefaultLayout({ children }: { children: React.ReactNode }) {
   console.log("DefaultLayout:layout.tsx start");
+  console.log("env:", process.env.NEXT_PUBLIC_API_URL);
   useEffect(() => {
     AOS.init({
       once: true,

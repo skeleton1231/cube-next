@@ -1,4 +1,6 @@
 export async function getCsrfToken() {
-    await fetch('http://localhost:8000/sanctum/csrf-cookie');
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+
+    await fetch(apiUrl + '/sanctum/csrf-cookie');
 }
   
