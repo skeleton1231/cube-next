@@ -1,10 +1,14 @@
 'use client'
+
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import Cookies from 'js-cookie';
 import { AxiosError } from 'axios';
 import apiClient from '@/utils/APIClient';
 import { clearAllCookies } from '@/utils/Cookie';
 import Utils from '@/utils/utils';
+
 
 export interface User {
   id: number;
@@ -35,8 +39,13 @@ export const UserProvider = ({ children }: UserContextProps) => {
       await apiClient.logoutUser(user); // 调用ApiClient的logoutUser方法
       setUser(null); // 清除用户信息
       clearAllCookies();
-      Utils.redirectTo("/signin",3000);
-      // 这里可能还需要其他清理工作
+
+      toast.success('Successfully logged out!', {
+        position: toast.POSITION.TOP_CENTER,
+        onClose: () => {
+          Utils.redirectTo("/signin", 6000); // Redirect after the toast is dismissed
+        }
+      });
     } catch (error) {
       console.error('An error occurred during logout:', error);
       // 可能会设置一个错误状态来显示错误消息
@@ -65,7 +74,12 @@ export const UserProvider = ({ children }: UserContextProps) => {
           if (axiosError.response?.status === 401) {  // If HTTP status code is 401
             setUser(null);
             clearAllCookies();
-            Utils.redirectTo("/signin",3000);
+            toast.error('Authentication Fail!', {
+              position: toast.POSITION.TOP_CENTER,
+              onClose: () => {
+                Utils.redirectTo("/", 6000); // Redirect after the toast is dismissed
+              }
+            });
           }
         }
       }

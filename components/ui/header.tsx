@@ -1,9 +1,10 @@
 'use client'
-import { useCurrentUser } from '@/app/hook/user';
+//import { useCurrentUser } from '@/app/hook/user';
 import { useUser } from '@/context/UserContext';
-import apiClient from '@/utils/APIClient';
+//import apiClient from '@/utils/APIClient';
 import Link from 'next/link'
 import React from 'react';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 
@@ -80,5 +81,6 @@ export default function Header({ nav = true }: { nav?: boolean }) {
         </div>
       </div>
     </header>
+    
   )
 }

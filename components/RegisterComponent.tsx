@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react';
 import InputField from './InputField';
 import apiClient from '@/utils/APIClient';
 import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 //import { useRouter } from 'next/router';
 import { useCurrentUser } from '@/app/hook/user';
 import Utils from '@/utils/utils';
@@ -44,8 +43,9 @@ const validations: ValidationFunctions = {
 
 const RegisterComponent: React.FC = () => {
     const { user } = useCurrentUser();
-    if (user) { Utils.redirectTo("/",3000); } 
+    if (user) { Utils.redirectTo("/", 3000); }
 
+    const [isSubmitting, setIsSubmitting] = useState(false);
     const [formFields, setFormFields] = useState<UserFields>(fields);
     const [errors, setErrors] = useState<ErrorState>({});
     const [touched, setTouched] = useState<TouchedFields>({
@@ -83,7 +83,9 @@ const RegisterComponent: React.FC = () => {
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
+        if (isSubmitting) return;
 
+        setIsSubmitting(true);
         let valid = true;
         let newErrors: ErrorState = {};
 
@@ -102,23 +104,26 @@ const RegisterComponent: React.FC = () => {
 
         if (!valid) {
             setErrors(newErrors);
+            setIsSubmitting(false);
             return;
         }
 
         try {
             const response = await apiClient.registerUser(formFields);
             // 检查是否在客户端环境中
-
-            if (typeof window !== 'undefined') {
-                Utils.redirectTo("/",3000);
-            }
+            toast.success('Successfully Registrited!', {
+                position: toast.POSITION.TOP_CENTER,
+                onClose: () => {
+                    if (typeof window !== 'undefined') {
+                        Utils.redirectTo("/", 6000);
+                    }
+                }
+            });
         } catch (error) {
             console.error(error);
             const message = (error as any).response?.data?.message || 'An error occurred during registration.';
             toast.error(message);
         }
-
-
     };
 
     return (
@@ -172,8 +177,12 @@ const RegisterComponent: React.FC = () => {
                 error={touched.passwordConfirmation && errors.passwordConfirmation ? errors.passwordConfirmation : undefined}
             />
             <div className="mt-6">
-                <button className="btn-sm text-sm text-white bg-indigo-500 hover:bg-indigo-600 w-full shadow-sm group">
-                    Request Demo{' '}
+                <button
+                    disabled={isSubmitting}
+                    className={`btn-sm text-sm text-white bg-indigo-500 hover:bg-indigo-600 w-full shadow-sm group 
+              ${isSubmitting ? 'opacity-50 cursor-not-allowed' : ''}`} // change the appearance of the disabled button
+                >
+                    {isSubmitting ? 'Registering...' : 'Register'}
                     <span className="tracking-normal text-sky-300 group-hover:translate-x-0.5 transition-transform duration-150 ease-in-out ml-1">
                         -&gt;
                     </span>

@@ -33,12 +33,15 @@ const validations: { [key: string]: (value: string) => string | null; } = {
 
 export default function SignIn() {
 
-  const { user, loading } = useCurrentUser();
-  if (user) { Utils.redirectTo("/",3000); } 
-  
+  const { user } = useCurrentUser();
+  if (user) { Utils.redirectTo("/", 3000); }
+
+  // 添加一个新的状态变量来跟踪是否正在提交
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [formFields, setFormFields] = useState(fields);
   const [touched, setTouched] = useState<TouchedFields>({ email: false, password: false });
   const [errors, setErrors] = useState<ErrorState>({});
+
 
   const handleInputChange = (field: keyof LoginFormFields) => (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
@@ -64,6 +67,12 @@ export default function SignIn() {
 
   const handleSubmit = async (e: { preventDefault: () => void; }) => {
     e.preventDefault();
+
+    // 如果已经在提交，直接返回
+    if (isSubmitting) return;
+
+    setIsSubmitting(true); // 设置为正在提交状态
+    console.log(isSubmitting);
     Object.keys(formFields).forEach((field) => {
       const fieldKey = field as keyof LoginFormFields;
       validateField(fieldKey, formFields[fieldKey]);
@@ -73,18 +82,21 @@ export default function SignIn() {
         const data = await apiClient.loginUser(formFields);
         // handle success (e.g. redirect user, show a success message, etc.)
         toast.success('Successfully logged in!', {
-          position: toast.POSITION.TOP_CENTER
+          position: toast.POSITION.TOP_CENTER,
+          onClose: () => {
+            Utils.redirectTo("/", 6000); // Redirect after the toast is dismissed
+          }
         });
-        Utils.redirectTo("/",3000);
+        //Utils.redirectTo("/",3000);
       } catch (error) {
-        // handle error (e.g. show error message)
-        console.error("An error occurred while logging in: ", error);
         // handle error (e.g. show error message)
         console.error("An error occurred while logging in: ", error);
         toast.error('Failed to log in. Please try again.', {
           position: toast.POSITION.TOP_CENTER
         });
       }
+    } else {
+      setIsSubmitting(false); // 如果有验证错误，也要重置提交状态
     }
   };
 
@@ -119,12 +131,17 @@ export default function SignIn() {
       </Link>
       {/* The rest of your form */}
       <div className="mt-6">
-        <button className="btn-sm text-sm text-white bg-indigo-500 hover:bg-indigo-600 w-full shadow-sm group">
-          Sign In{' '}
+        <button
+          disabled={isSubmitting}
+          className={`btn-sm text-sm text-white bg-indigo-500 hover:bg-indigo-600 w-full shadow-sm group 
+              ${isSubmitting ? 'opacity-50 cursor-not-allowed' : ''}`} // 添加样式来改变禁用按钮的外观
+        >
+          {isSubmitting ? 'Signing In...' : 'Sign In'}
           <span className="tracking-normal text-sky-300 group-hover:translate-x-0.5 transition-transform duration-150 ease-in-out ml-1">
             -&gt;
           </span>
         </button>
+
       </div>
       <ToastContainer
         position="top-center"
@@ -140,11 +157,3 @@ export default function SignIn() {
     </form>
   );
 }
-
-
-
-
-
-
-
-
