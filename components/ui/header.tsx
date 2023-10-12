@@ -9,7 +9,6 @@ export default function Header({ nav = true }: { nav?: boolean }) {
   const { user, loading } = useCurrentUser();
   const [showSubMenu, setShowSubMenu] = React.useState(false);
   console.log("Current user: ", user);
-
   
   return (
     <header className="absolute w-full z-30">

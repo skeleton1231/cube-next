@@ -75,7 +75,8 @@ class APIClient {
     }
 
 }
-
-const apiClient = new APIClient('http://localhost:8000');
+console.log("load env in APIClient:", process.env.NEXT_PUBLIC_API_URL);
+const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+const apiClient = new APIClient(apiUrl);
 
 export default apiClient;
