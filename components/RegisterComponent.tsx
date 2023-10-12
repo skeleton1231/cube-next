@@ -1,14 +1,13 @@
 'use client'
 import { validateEmail, validateName, validatePassword, validatePasswordConfirmation } from '@/utils/validate'
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import InputField from './InputField';
 import apiClient from '@/utils/APIClient';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { useRouter } from 'next/router';
+//import { useRouter } from 'next/router';
 import { useCurrentUser } from '@/app/hook/user';
-
-
+import Utils from '@/utils/utils';
 
 type UserFields = {
     name: string;
@@ -43,31 +42,30 @@ const validations: ValidationFunctions = {
     passwordConfirmation: validatePasswordConfirmation,
 };
 
-const RegisterComponent = () => {
-    const { user, loading } = useCurrentUser();
-    if (user) { window.location.href = '/'; } 
+const RegisterComponent: React.FC = () => {
+    const { user } = useCurrentUser();
+    if (user) { Utils.redirectTo("/",3000); } 
 
     const [formFields, setFormFields] = useState<UserFields>(fields);
     const [errors, setErrors] = useState<ErrorState>({});
-    const [touched, setTouched] = useState<TouchedFields>({ // New state
+    const [touched, setTouched] = useState<TouchedFields>({
         name: false,
         email: false,
         password: false,
         passwordConfirmation: false
     });
-    // const [successMessage, setSuccessMessage] = useState('');
-    // const { apiResponse, setApiResponse } = useApiResponse();
-
 
     const handleInputChange = (fieldName: keyof UserFields) => (
         event: React.ChangeEvent<HTMLInputElement>
     ) => {
         const { value } = event.target;
         setFormFields(prev => ({ ...prev, [fieldName]: value }));
-        if (touched[fieldName]) { // Only validate if field has been touched
+
+        if (touched[fieldName]) {
             const error = fieldName === 'passwordConfirmation'
-                ? validations[fieldName](formFields.password, value)
+                ? validations[fieldName](value, formFields.password)
                 : validations[fieldName](value);
+
             setErrors(prev => ({ ...prev, [fieldName]: error }));
         }
     };
@@ -77,8 +75,9 @@ const RegisterComponent = () => {
     ) => {
         setTouched(prev => ({ ...prev, [fieldName]: true }));
         const error = fieldName === 'passwordConfirmation'
-            ? validations[fieldName](formFields.password, formFields[fieldName])
+            ? validations[fieldName](formFields[fieldName], formFields.password)
             : validations[fieldName](formFields[fieldName]);
+
         setErrors(prev => ({ ...prev, [fieldName]: error }));
     };
 
@@ -86,32 +85,40 @@ const RegisterComponent = () => {
         event.preventDefault();
 
         let valid = true;
-        let formErrors: ErrorState = {};
+        let newErrors: ErrorState = {};
 
+        // Validate all fields before submitting
         Object.keys(validations).forEach((key) => {
-            const fieldError = key === 'passwordConfirmation'
-                ? validations[key as keyof UserFields](formFields.password, formFields[key as keyof UserFields])
-                : validations[key as keyof UserFields](formFields[key as keyof UserFields]);
-            if (fieldError) {
-                formErrors[key as keyof UserFields] = fieldError;
+            const fieldKey = key as keyof UserFields;
+            const error = fieldKey === 'passwordConfirmation'
+                ? validations[fieldKey](formFields[fieldKey], formFields.password)
+                : validations[fieldKey](formFields[fieldKey]);
+
+            if (error) {
+                newErrors[fieldKey] = error;
                 valid = false;
             }
         });
 
         if (!valid) {
-            setErrors(formErrors);
+            setErrors(newErrors);
             return;
         }
+
         try {
-            // Use the apiClient object
-            const response = await apiClient.registerUser(formFields)
-            toast.success(response.msg);
-            let router = useRouter();
-            router.push('/'); // Redirect to home page
-        } catch (error: any) {
-            console.error('Registration failed:', error);
-            toast.error(error.message || 'An unknown error occurred');
+            const response = await apiClient.registerUser(formFields);
+            // 检查是否在客户端环境中
+
+            if (typeof window !== 'undefined') {
+                Utils.redirectTo("/",3000);
+            }
+        } catch (error) {
+            console.error(error);
+            const message = (error as any).response?.data?.message || 'An error occurred during registration.';
+            toast.error(message);
         }
+
+
     };
 
     return (

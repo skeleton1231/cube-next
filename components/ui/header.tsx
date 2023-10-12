@@ -1,15 +1,18 @@
 'use client'
 import { useCurrentUser } from '@/app/hook/user';
+import { useUser } from '@/context/UserContext';
+import apiClient from '@/utils/APIClient';
 import Link from 'next/link'
 import React from 'react';
 
 
 
 export default function Header({ nav = true }: { nav?: boolean }) {
-  const { user, loading } = useCurrentUser();
+  const userContext = useUser();
+  const user = userContext?.user;
+  const logout = userContext?.logout;
   const [showSubMenu, setShowSubMenu] = React.useState(false);
-  console.log("Current user: ", user);
-  
+
   return (
     <header className="absolute w-full z-30">
       <div className="max-w-6xl mx-auto px-4 sm:px-6">
@@ -64,7 +67,7 @@ export default function Header({ nav = true }: { nav?: boolean }) {
                       {showSubMenu && (
                         <div className="absolute right-0 mt-2 py-2 w-48 bg-white rounded-md shadow-xl z-20">
                           <Link className="block px-4 py-2 text-sm capitalize text-gray-700 hover:bg-blue-500 hover:text-white" href="/profile">Profile</Link>
-                          <Link className="block px-4 py-2 text-sm capitalize text-gray-700 hover:bg-blue-500 hover:text-white" href="/signout">Sign Out</Link>
+                          <a onClick={logout} className="block px-4 py-2 text-sm capitalize text-gray-700 hover:bg-blue-500 hover:text-white cursor-pointer">Sign Out</a>
                         </div>
                       )}
                     </li>

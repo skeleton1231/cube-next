@@ -6,6 +6,7 @@ import { validateEmail, validatePassword } from '@/utils/validate';
 import InputField from './InputField'; // Assuming this is the correct path
 import { ToastContainer, toast } from 'react-toastify';
 import { useCurrentUser } from '@/app/hook/user';
+import Utils from '@/utils/utils';
 
 type LoginFormFields = {
   email: string;
@@ -33,7 +34,7 @@ const validations: { [key: string]: (value: string) => string | null; } = {
 export default function SignIn() {
 
   const { user, loading } = useCurrentUser();
-  if (user) { window.location.href = '/'; } 
+  if (user) { Utils.redirectTo("/",3000); } 
   
   const [formFields, setFormFields] = useState(fields);
   const [touched, setTouched] = useState<TouchedFields>({ email: false, password: false });
@@ -74,8 +75,7 @@ export default function SignIn() {
         toast.success('Successfully logged in!', {
           position: toast.POSITION.TOP_CENTER
         });
-        window.location.href = '/';
-
+        Utils.redirectTo("/",3000);
       } catch (error) {
         // handle error (e.g. show error message)
         console.error("An error occurred while logging in: ", error);

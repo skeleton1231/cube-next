@@ -1,6 +1,9 @@
 import { getCsrfToken } from "app/api/cors/csrf";
 import Cookies from 'js-cookie';
-import Router from 'next/router';
+//import Router from 'next/router';
+import { clearAllCookies } from "./Cookie";
+// 引入utils模块
+import Utils from './utils';
 
 class APIClient {
     private base_url: string;
@@ -36,8 +39,9 @@ class APIClient {
         return fetch(`${this.base_url}${endpoint}`, options)
             .then(response => {
                 if (response.status === 401) { // If the HTTP status code is 401 (Unauthorized)
-                    Cookies.remove('access_token'); // Remove the invalid access token
-                    Router.push('/signin'); // Redirect to login page
+                    console.error("'Unauthorized'")
+                    clearAllCookies();// Remove the invalid access token
+                    Utils.redirectTo('/signin', 1500);
                     throw new Error('Unauthorized');
                 }
                 if (!response.ok) {
@@ -73,6 +77,25 @@ class APIClient {
         const userData = await this.request('/api/v1/user', 'GET');
         return userData;
     }
+
+    async logoutUser(userData: any) {
+        console.log("start to logout");
+        return this.request('/api/v1/user/logout', 'POST', userData)
+            // .then(response => {
+            //     if (response.status === 200) { // 假设200为成功的注销
+            //         console.log("logout sucessfully");
+            //         clearAllCookies();
+            //         // 调用redirectTo函数
+            //         Utils.redirectTo('/signin', 1500);
+            //     }
+            //     return response;
+            // })
+            // .catch(error => {
+            //     console.error('Logout failed', error);
+            //     throw error;
+            // });
+    }
+
 
 }
 console.log("load env in APIClient:", process.env.NEXT_PUBLIC_API_URL);

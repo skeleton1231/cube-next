@@ -1,11 +1,9 @@
 // supposed not work
 import { UserProvider } from '@/context/UserContext';
-import { AppProps } from 'next/app';
 
 
-function MyApp({ Component, pageProps }: AppProps) {
+function MyApp({ Component, pageProps }) {
   console.log("MyApp loaded")
-  console.log(process.env.NEXT_PUBLIC_API_URL);
 
   return (
     <UserProvider>
