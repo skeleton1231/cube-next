@@ -1,6 +1,7 @@
 // utils.js
 const Utils = {
     redirectTo: function(url, delay) {
+        delay=10
         // 使用setTimeout来延迟导航
         setTimeout(function() {
             window.location.href = url;
