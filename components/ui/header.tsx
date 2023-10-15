@@ -3,8 +3,10 @@
 import { useUser } from '@/context/UserContext';
 //import apiClient from '@/utils/APIClient';
 import Link from 'next/link'
-import React from 'react';
+import React, { useEffect } from 'react';
+import AOS from 'aos';
 import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer } from 'react-toastify';
 
 
 export default function Header({ nav = true }: { nav?: boolean }) {
@@ -12,7 +14,14 @@ export default function Header({ nav = true }: { nav?: boolean }) {
   const user = userContext?.user;
   const logout = userContext?.logout;
   const [showSubMenu, setShowSubMenu] = React.useState(false);
-
+    useEffect(() => {
+    AOS.init({
+      once: true,
+      disable: 'phone',
+      duration: 600,
+      easing: 'ease-out-sine',
+    })
+  })
   return (
     <header className="absolute w-full z-30">
       <div className="max-w-6xl mx-auto px-4 sm:px-6">
@@ -79,6 +88,17 @@ export default function Header({ nav = true }: { nav?: boolean }) {
 
         </div>
       </div>
+      <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
     </header>
     
   )

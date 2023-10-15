@@ -188,7 +188,7 @@ const RegisterComponent: React.FC = () => {
                     </span>
                 </button>
             </div>
-            <ToastContainer
+            {/* <ToastContainer
                 position="top-center"
                 autoClose={5000}
                 hideProgressBar={false}
@@ -198,7 +198,7 @@ const RegisterComponent: React.FC = () => {
                 pauseOnFocusLoss
                 draggable
                 pauseOnHover
-            />
+            /> */}
         </form>
     );
 }
