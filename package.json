@@ -10,6 +10,8 @@
   },
   "dependencies": {
     "@headlessui/react": "^1.7.14",
+    "@stripe/react-stripe-js": "^2.3.1",
+    "@stripe/stripe-js": "^2.1.7",
     "@types/js-cookie": "^3.0.3",
     "@types/node": "^20.1.0",
     "@types/react": "^18.2.5",

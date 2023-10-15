@@ -22,7 +22,8 @@ export default function DefaultLayout({ children }: { children: React.ReactNode 
   })
 
   return (
-    <><UserProvider>
+    <>
+    <UserProvider>
       <Header />
       <main className="grow">
         <div className="hidden md:block absolute left-1/2 -translate-x-1/2 pointer-events-none -z-10" aria-hidden="true">
@@ -30,19 +31,19 @@ export default function DefaultLayout({ children }: { children: React.ReactNode 
         </div>
         {children}
       </main>
-      <ToastContainer
-                position="top-center"
-                autoClose={5000}
-                hideProgressBar={false}
-                newestOnTop={false}
-                closeOnClick
-                rtl={false}
-                pauseOnFocusLoss
-                draggable
-                pauseOnHover
-            />
       <Footer />
     </UserProvider>
+    <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
     </>
   )
 }

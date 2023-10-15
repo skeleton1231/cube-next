@@ -15,7 +15,6 @@ import Cta from '@/components/cta'
 export default function Home() {
   return (
     <>
-    
       <Hero />
       <Testimonials />
       <Features />

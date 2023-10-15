@@ -1,8 +1,6 @@
 import Image from 'next/image'
 import Header from '@/components/ui/header'
 import Illustration from '@/public/images/auth-illustration.svg'
-import { UserProvider } from '@/context/UserContext'
-import Footer from '@/components/ui/footer'
 
 export default function AuthLayout({
   children,
@@ -11,8 +9,6 @@ export default function AuthLayout({
 }) {
   return (
     <>
-      <UserProvider>
-      <Header nav={true} />
       <main className="grow">
         <section className="relative">
           {/* Illustration */}
@@ -22,8 +18,6 @@ export default function AuthLayout({
           {children}
         </section>
       </main>
-      <Footer />
-      </UserProvider>
     </>
   )
 }

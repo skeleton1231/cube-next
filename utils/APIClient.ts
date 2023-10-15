@@ -13,6 +13,7 @@ class APIClient {
     }
 
     private async request(endpoint: string, method: 'GET' | 'POST' | 'PUT' | 'DELETE', body?: any) {
+        
         await getCsrfToken();
 
         // Create headers object
@@ -81,19 +82,10 @@ class APIClient {
     async logoutUser(userData: any) {
         console.log("start to logout");
         return this.request('/api/v1/user/logout', 'POST', userData)
-            // .then(response => {
-            //     if (response.status === 200) { // 假设200为成功的注销
-            //         console.log("logout sucessfully");
-            //         clearAllCookies();
-            //         // 调用redirectTo函数
-            //         Utils.redirectTo('/signin', 1500);
-            //     }
-            //     return response;
-            // })
-            // .catch(error => {
-            //     console.error('Logout failed', error);
-            //     throw error;
-            // });
+    }
+
+    async setupIntent() {
+        return this.request('/api/setup-intent', 'GET');
     }
 
 
