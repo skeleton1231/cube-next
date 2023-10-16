@@ -5,6 +5,8 @@ import {
   useStripe,
   useElements,
 } from '@stripe/react-stripe-js';
+import styles from './CheckoutForm2.module.css';
+
 
 interface CheckoutFormProps {
 }
@@ -48,11 +50,28 @@ const CheckoutForm2: React.FC<CheckoutFormProps> = () => {
     setIsLoading(false);
   };
 
+  const buttonStyle = {
+    background: '#5469d4',
+    fontFamily: 'Arial, sans-serif',
+    color: '#ffffff',
+    borderRadius: '4px',
+    border: '0',
+    padding: '12px 16px',
+    fontSize: '16px',
+    fontWeight: '600',
+    cursor: 'pointer',
+    display: 'block',
+    transition: 'all 0.2s ease',
+    boxShadow: '0px 4px 5.5px 0px rgba(0, 0, 0, 0.07)',
+    width: '100%',
+    opacity: isLoading || !stripe || !elements ? '0.5' : '1', // 用条件逻辑来处理“disabled”状态的样式变化
+  };
+
   return (
     <form id="payment-form" onSubmit={handleSubmit}>
       <LinkAuthenticationElement id="link-authentication-element" />
       <PaymentElement id="payment-element" />
-      <button disabled={isLoading || !stripe || !elements} id="submit">
+      <button style={buttonStyle} disabled={isLoading || !stripe || !elements} id="submit">
         <span id="button-text">
           {isLoading ? <div className="spinner" id="spinner"></div> : 'Pay now'}
         </span>

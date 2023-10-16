@@ -7,7 +7,7 @@ import apiClient from '@/utils/APIClient';
 import Header from "@/components/ui/header";
 import Link from "next/link";
 
-// 此处根据 apiClient.setupIntent() 的实际返回类型来调整。
+// 此处根据 apiClient.paymentIntent() 的实际返回类型来调整。
 interface IntentResponse {
   data: any;
   intent: {
@@ -24,8 +24,9 @@ const Payment: React.FC = () => {
   useEffect(() => {
     const fetchClientSecret = async () => {
       try {
-        const response: IntentResponse = await apiClient.setupIntent();
-        setClientSecret(response.data.intent.client_secret); // Adjust according to the actual structure of your response
+        const response: IntentResponse = await apiClient.paymentIntent();
+        console.log(response.data.intent.client_secret);
+        setClientSecret(response.data.intent.clientSecret); // Adjust according to the actual structure of your response
       } catch (error) {
         console.error("Error fetching client secret:", error);
         // Handle error as appropriate
@@ -42,21 +43,12 @@ const Payment: React.FC = () => {
         <div className="pt-32 pb-12 md:pt-40 md:pb-20">
           <div className="max-w-sm mx-auto">
             {clientSecret ? ( // Check if clientSecret is not null
-              <Elements stripe={stripePromise} options={{clientSecret}} // Pass the clientSecret here
-              >
+              <Elements stripe={stripePromise} options={{clientSecret}} >
                 <CheckoutForm2 /> {/* Pass clientSecret to CheckoutForm2 */}
               </Elements>
             ) : (
               <p>Loading...</p> // Show a loading message or a spinner
             )}
-          </div>
-          <div className="text-center mt-6">
-            <div className="text-sm text-slate-500">
-              Return to{' '}
-              <Link href="/" className="font-medium text-indigo-500">
-                Home
-              </Link>
-            </div>
           </div>
         </div>
       </div>

@@ -66,7 +66,7 @@ export const UserProvider = ({ children }: UserContextProps) => {
         try {
           if (!userData) {
             userData = await apiClient.fetchUser(token);
-            Cookies.set('user', JSON.stringify(userData));  // Saving user in cookie
+            Cookies.set('user', JSON.stringify(userData),{ sameSite: 'none', secure: true });  // Saving user in cookie
           }
           setUser(userData);
         } catch (error) {

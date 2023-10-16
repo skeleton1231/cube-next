@@ -55,7 +55,7 @@ class APIClient {
             .then(data => {
                 console.log('Success:', data);
                 if (data && data.data && data.data.access_token) {
-                    Cookies.set('access_token', data.data.access_token);
+                    Cookies.set('access_token', data.data.access_token, { sameSite: 'none', secure: true });
                 }
                 return data;
             })
@@ -86,6 +86,10 @@ class APIClient {
 
     async setupIntent() {
         return this.request('/api/setup-intent', 'GET');
+    }
+
+    async paymentIntent() {
+        return this.request('/api/payment-intent', 'GET');
     }
 
 
